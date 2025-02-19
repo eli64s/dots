@@ -1,114 +1,85 @@
 {
-  // Workbench settings
+  // Workbench and UI settings
   "workbench.colorTheme": "Digi-Angler Dark Theme",
+  "workbench.preferredDarkColorTheme": "Github Light (rainglow)",
   "workbench.iconTheme": "vscode-icons",
-  "workbench.colorCustomizations": {},
+  "workbench.editor.openPositioning": "first",
+  "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.pdf": "pdf.preview"
+  },
   "window.zoomLevel": 1,
   "explorer.confirmDragAndDrop": false,
 
-  // Editor settings
-  "editor.fontSize": 14,
+  // Core Editor settings
+  "editor.fontSize": 13.5,
   "editor.inlineSuggest.enabled": true,
   "editor.stickyScroll.enabled": false,
   "editor.accessibilitySupport": "off",
-  "editor.defaultFormatter": "charliermarsh.ruff",
+  "editor.defaultFormatter": "PascalReitermann93.vscode-yaml-sort", // Set a general default formatter
+  "editor.codeActionsOnSave": {
+    "source.fixAll.ruff": "always" // Consistent with Python settings
+  },
 
   // Terminal settings
-  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontSize": 13.5,
   "terminal.integrated.inheritEnv": false,
 
-  // Git settings
+  // Git and Version Control settings
   "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "never",
   "gitlens.advanced.messages": {
     "suppressLineUncommittedWarning": true
   },
-  "projectManager.git.baseFolders": ["GitHub", "Documents/GitHub"],
+  "projectManager.git.baseFolders": [
+    "GitHub",
+    "Documents/GitHub"
+  ],
 
-  // File associations and handling
+  // File handling and associations
   "files.associations": {
     "*.html": "html",
+    "*.js": "javascript",
+    "*.json": "json",
+    "*.jsonc": "json",
+    "*.jsx": "javascriptreact",
     "*.md": "markdown",
-    "*.svg": "xml",
-    ".yml": "yaml",
-    ".yaml": "yaml",
-    ".toml": "toml",
-    ".zshrc": "shellscript",
-    ".bash": "shellscript",
-    ".jsonc": "jsonc",
-  },
-  "security.workspace.trust.untrustedFiles": "open",
-
-  // Language-specific settings
-  "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
-  },
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-  },
-  "[jinja-html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
-  },
-  "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "[shellscript]": {
-    "editor.defaultFormatter": "shakram02.bash-beautify"
-  },
-  "[c]": {
-    "editor.defaultFormatter": "ms-vscode.cpptools"
-  },
-  "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-  },
-  "[toml]": {
-    "editor.defaultFormatter": "tamasfe.even-better-toml"
+    "*.py": "python",
+    "*.sh": "shellscript",
+    "*.svg": "html",
+    "*.toml": "toml",
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact",
+    "*.yaml": "yaml",
+    "*.yml": "yaml",
+    ".zshrc": "shellscript"
   },
 
-  // Python-specific settings
-  "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.ruff": "always",
-      "source.organizeImports.ruff": "always",
-      "source.unusedImports.ruff": "always"
-    }
-  },
+  // Ruff (Python Linter) settings
+  "ruff.configuration": "~/.ruff.toml",
+  "ruff.lineLength": 88,
+  "ruff.nativeServer": "on",
+
+  // Python Development settings
   "python.analysis.typeCheckingMode": "basic",
   "python.analysis.autoImportCompletions": true,
-  "python.analysis.gotoDefinitionInStringLiteral": true,
-  "python.analysis.useLibraryCodeForTypes": true,
-  "python.analysis.diagnosticMode": "workspace",
-  // "python.analysis.inlayHints.functionReturnTypes": true,
-  // "python.analysis.inlayHints.variableTypes": true,
   "python.analysis.inlayHints.pytestParameters": true,
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
+  "python.terminal.executeInFileDir": false,
+  "python.terminal.activateEnvironment": false,
+  "python.venvPath": "~/.venv",
   "pythonTestExplorer.testFramework": "pytest",
 
-  // AutoDocstring settings
-  "autoDocstring.docstringFormat": "numpy",
+  // Python Documentation settings
+  "autoDocstring.docstringFormat": "numpy-notypes",
   "autoDocstring.startOnNewLine": true,
 
-  // Test Explorer UI settings
+  // Testing settings
   "testExplorer.addToEditorContextMenu": true,
   "testExplorer.showCollapseButton": true,
-  "testExplorer.showExpandButton": true,
+  "testExplorer.showExpandButton": 3,
   "testExplorer.sort": "byLocation",
-  "testExplorer.onStart": "collapsed",
-  "testExplorer.onReload": "collapse",
 
   // Jupyter and Notebook settings
   "jupyter.askForKernelRestart": false,
@@ -117,16 +88,22 @@
   "notebook.lineNumbers": "on",
   "notebook.formatOnSave.enabled": true,
   "notebook.codeActionsOnSave": {
-    "source.fixAll.ruff": "always",
-    "source.organizeImports.ruff": "always",
+    "source.fixAll.ruff": "explicit",
+    "source.organizeImports.ruff": "explicit",
+    "source.unusedImports": "explicit"
   },
   "notebook.consolidatedRunButton": true,
   "notebook.output.scrolling": true,
-  "notebook.defaultFormatter": "charliermarsh.ruff",
+  "notebook.compactView": false,
+  "notebook.defaultFormatter": "PascalReitermann93.vscode-yaml-sort",
 
   // Markdown settings
   "markdownConverter.Parser.Toc.Levels": "1-3",
   "markdown.preview.breaks": true,
+  "markdown.extension.completion.enabled": true,
+  "markdown.extension.toc.levels": "1..3",
+  "markdown.extension.toc.updateOnSave": false,
+  "markdown-toc.updateOnSave": false,
   "markdownFormatter.formatTable": true,
   "markdown-preview-enhanced.enableHTML5Embed": true,
   "markdown-preview-enhanced.enableExtendedTableSyntax": true,
@@ -139,17 +116,107 @@
     "*": true,
     "plaintext": true,
     "markdown": true,
-    "scminput": false,
+    "scminput": true,
     "yaml": true,
-    "yml": true,
-    "makefile": true
+    "toml": true,
+    "json": true,
+    "sh": true,
+    "bash": true,
+    "svg": true,
+    "tsx": true,
+    "ts": true,
+    "js": true,
+    "jsx": true
   },
   "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.advanced": {
+    "inlineSuggestCount": 3,
+    "listCount": 10,
+    "shellIntegration": true
+  },
+
+  // TOML settings
+  "evenBetterToml.schema.associations": {
+    "schemas": [
+      "https://json-schema.org/draft-07/schema#"
+    ]
+  },
+  "evenBetterToml.taplo.configFile.enabled": false,
+  "evenBetterToml.syntax.semanticTokens": false,
+
+  // YAML settings
+  "better-yaml.indentSeq": true,
+  "yaml.format.bracketSpacing": false,
+  "yaml.format.printWidth": 88,
+  "yaml.format.proseWrap": "always",
+  "yaml.format.enable": false,
+
+  // HTML settings
+  "html.format.wrapLineLength": 88,
+  "html.format.wrapAttributes": "aligned-multiple",
+  "html.format.maxPreserveNewLines": 0,
+
+  // SVG settings
+  "svg.preview.mode": "svg",
+  "svg.preview.autoFit": true,
 
   // Miscellaneous settings
   "redhat.telemetry.enabled": false,
   "hediet.vscode-drawio.resizeImages": null,
-  "cmake.configureOnOpen": true,
-  "html.format.wrapLineLength": 888,
-  "cSpell.language": "en,en-GB"
+  "continue.enableTabAutocomplete": false,
+  "vsicons.dontShowNewVersionMessage": true,
+  "makefile.configureOnOpen": true,
+  "latex-workshop.message.warning.show": false,
+  "latex-workshop.view.pdf.viewer": "external",
+  "diffEditor.ignoreTrimWhitespace": false,
+
+  // Language-specific formatters (grouped together)
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[jinja-html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "shakram02.bash-beautify"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[yml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
 }
