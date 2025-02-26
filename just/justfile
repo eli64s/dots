@@ -1,0 +1,4 @@
+home_dir := env('HOME')
+
+test:
+  echo "{{home_dir}}"
