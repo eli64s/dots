@@ -1,122 +1,120 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 # =========================================================================
-#  YouTube Batch Downloader: Simplified Edition
-#
-#  A streamlined approach to YouTube audio extraction
+#  YOUTUBE BATCH DOWNLOADER (pytubefix edition, macOS‑friendly + debug)
 # =========================================================================
 
-# Set the destination directory for MP3 files
-OUTPUT_DIR="/Users/k01101011/Assets/media/edm/mp3"
+set -euo pipefail
+IFS=$'\n\t'
 
-# Display banner
-echo "========================================================"
-echo "  YOUTUBE BATCH DOWNLOADER: STREAMLINED PROTOCOL   "
-echo "========================================================"
+# ——— Configuration —————————————————————————————————————————————————————
+OUTPUT_DIR="$HOME/Assets/media/edm/mp3"
+LOG_FILE="download.log"
+FAILED_FILE="failed_links.txt"
+# toggle overwrite of existing MP3s:
+OVERWRITE="no"
+# ————————————————————————————————————————————————————————————————————
 
-# Create the output directory if it doesn't exist
 mkdir -p "$OUTPUT_DIR"
+> "$LOG_FILE"
+> "$FAILED_FILE"
 
-# Check if a links file was provided as an argument
-if [ $# -eq 1 ] && [ -f "$1" ]; then
-    LINKS_FILE="$1"
-    echo "📋 Reading links from: $LINKS_FILE"
-
-    # Count total links for progress tracking
-    TOTAL_LINKS=$(grep -c "https://" "$LINKS_FILE")
-    CURRENT=0
-    SUCCESS=0
-    FAILED=0
-
-    # Create or clear the failed links file
-    > failed_links.txt
-
-    # Process each link in the file
-    while IFS= read -r line || [ -n "$line" ]; do
-        # Skip empty lines and comments
-        if [[ -z "$line" || "$line" =~ ^# ]]; then
-            continue
-        fi
-
-        # Extract YouTube URL from the line
-        youtube_url=$(echo "$line" | grep -o 'https://www.youtube.com/watch?[^[:space:]"&]*')
-
-        if [ -z "$youtube_url" ]; then
-            continue
-        fi
-
-        # Increment our counter
-        CURRENT=$((CURRENT + 1))
-        echo "🔄 Processing link $CURRENT/$TOTAL_LINKS"
-        echo "📥 Downloading: $youtube_url"
-
-        # Step 1: Download the video
-        uvx --isolated pytubefix "$youtube_url"
-
-        # Step 2: Find all MP4 files in the current directory
-        # Sort them by modification time (newest first) - macOS compatible
-        latest_videos=$(find . -maxdepth 1 -name "*.mp4" -type f -exec stat -f "%m %N" {} \; | sort -nr | head -n 1 | cut -d' ' -f2-)
-
-        if [ -z "$latest_videos" ]; then
-            echo "   ❌ No video file found after download."
-            echo "$youtube_url" >> failed_links.txt
-            FAILED=$((FAILED + 1))
-            continue
-        fi
-
-        # Get the most recent video file
-        video_file="$latest_videos"
-        echo "   🎬 Video downloaded: $video_file"
-
-        # Step 3: Convert to MP3
-        base_name=$(basename "$video_file" .mp4)
-        echo "   🔄 Converting to MP3: $base_name"
-
-        ffmpeg -i "$video_file" -f mp3 -vn "$OUTPUT_DIR/$base_name.mp3"
-
-        if [ $? -eq 0 ]; then
-            echo "   ✅ Conversion successful: $base_name.mp3"
-            # Remove the original video file
-            rm "$video_file"
-            SUCCESS=$((SUCCESS + 1))
-        else
-            echo "   ❌ Conversion failed."
-            echo "$youtube_url" >> failed_links.txt
-            FAILED=$((FAILED + 1))
-        fi
-
-        echo ""
-    done < "$LINKS_FILE"
-
-    # Display final statistics
-    echo "========================================================"
-    echo "🏁 DOWNLOAD AND CONVERSION COMPLETE"
-    echo "========================================================"
-    echo "📊 Total links processed: $TOTAL_LINKS"
-    echo "✅ Successful conversions: $SUCCESS"
-    echo "❌ Failed conversions: $FAILED"
-
-    if [ $FAILED -gt 0 ]; then
-        echo "⚠️ Failed links have been logged to: failed_links.txt"
-    fi
-
-else
-    # If no links file provided, create a sample file
-    echo "⚠️ No links file provided."
-    echo "Creating a template file for you..."
-
-    cat > youtube_links.txt << EOL
-# YouTube Links for Batch Download
-# Add one URL per line
-https://www.youtube.com/watch?v=4HkaYZjzjPc
-# Add more links below
-EOL
-
-    echo "📝 Template created: youtube_links.txt"
-    echo "Please add your YouTube links to this file, then run:"
-    echo "  ./$(basename "$0") youtube_links.txt"
+if [[ $# -ne 1 ]]; then
+  echo "Usage: $(basename "$0") path/to/links.txt"
+  exit 1
 fi
 
-echo ""
-echo "Your MP3 files are in: $OUTPUT_DIR"
+LINKS_FILE="$1"
+if [[ ! -f "$LINKS_FILE" ]]; then
+  echo "Error: file not found – $LINKS_FILE"
+  exit 1
+fi
+
+# Count only real URLs
+TOTAL=$(grep -E -c '^\s*https?://' "$LINKS_FILE" || true)
+(( TOTAL == 0 )) && { echo "⚠️  No URLs found in $LINKS_FILE"; exit 0; }
+
+echo "📋 Reading links from: $LINKS_FILE"
+echo "    Found $TOTAL URL(s)" | tee -a "$LOG_FILE"
+
+COUNT=0
+SUCCESS=0
+FAIL=0
+
+# Read the file, stripping CRs and logging each line for debug
+while IFS= read -r raw_line || [[ -n "$raw_line" ]]; do
+  # strip Windows CR
+  line="${raw_line%%$'\r'}"
+  echo "DEBUG ─ raw line: <$line>" >> "$LOG_FILE"
+
+  # trim whitespace
+  url="${line#"${line%%[![:space:]]*}"}"
+  url="${url%"${url##*[![:space:]]}"}"
+
+  # skip blank/comment lines
+  if [[ -z "$url" || "$url" == \#* || ! "$url" =~ ^https?:// ]]; then
+    echo "DEBUG ─ skipping: <$url>" >> "$LOG_FILE"
+    continue
+  fi
+
+  (( COUNT++ ))
+  echo "🔄 [$COUNT/$TOTAL] $url" | tee -a "$LOG_FILE"
+
+  # 1️⃣ Download video via pytubefix
+  if uvx --isolated pytubefix "$url" >>"$LOG_FILE" 2>&1; then
+    # Find the newest .mp4 (macOS-friendly)
+    video_file=$(find . -maxdepth 1 -type f -iname '*.mp4' \
+                 -exec stat -f "%m %N" {} \; \
+               | sort -nr \
+               | head -n1 \
+               | cut -d' ' -f2-)
+    if [[ -z "$video_file" ]]; then
+      echo "   ❌ No .mp4 found after download!" | tee -a "$LOG_FILE"
+      echo "$url" >> "$FAILED_FILE"
+      (( FAIL++ ))
+      continue
+    fi
+    echo "   🎬 Downloaded: $video_file" | tee -a "$LOG_FILE"
+  else
+    echo "   ❌ Download failed" | tee -a "$LOG_FILE"
+    echo "$url" >> "$FAILED_FILE"
+    (( FAIL++ ))
+    continue
+  fi
+
+  # 2️⃣ Convert to MP3
+  base="$(basename "$video_file" .mp4)"
+  target="$OUTPUT_DIR/$base.mp3"
+
+  if [[ -f "$target" && "$OVERWRITE" != "yes" ]]; then
+    echo "   ⚠️  $base.mp3 exists, skipping conversion." | tee -a "$LOG_FILE"
+    (( SUCCESS++ ))
+  else
+    echo "   🔄 Converting to MP3: $base" | tee -a "$LOG_FILE"
+    if ffmpeg -i "$video_file" -vn -f mp3 "$target" >>"$LOG_FILE" 2>&1; then
+      echo "   ✅ Converted: $base.mp3" | tee -a "$LOG_FILE"
+      (( SUCCESS++ ))
+    else
+      echo "   ❌ Conversion failed" | tee -a "$LOG_FILE"
+      echo "$url" >> "$FAILED_FILE"
+      (( FAIL++ ))
+      # skip rm so you can inspect the broken video
+      continue
+    fi
+  fi
+
+  # 3️⃣ Cleanup
+  rm -f "$video_file"
+
+done < <(cat "$LINKS_FILE")
+
+# ────────────────────────────────────────────────────────────────────────────
+echo
+echo "========================================================"
+echo "🏁 COMPLETE"
+echo "  Processed : $TOTAL"
+echo "  Success   : $SUCCESS"
+echo "  Failed    : $FAIL"
+(( FAIL > 0 )) && echo "⚠️  See failed links: $FAILED_FILE"
+echo
+echo "Your MP3s are in: $OUTPUT_DIR"
 echo "========================================================"
