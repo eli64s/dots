@@ -1,0 +1,74 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+---
+description: Enforces best practices for using Pydantic in Python projects, focusing on validation, data modeling, serialization, and configuration for generative AI applications.
+globs: **/*.py, src/**/*.py, tests/**/*.py
+alwaysApply: false # Auto Attached based on globs
+agentRequested: false
+---
+
+**Core Pydantic Principles for Generative AI Projects:**
+
+1.  **Prefer Pydantic Models Over Raw Dictionaries:** For any data structure that requires validation or has a defined schema, especially for inputs and outputs, use Pydantic models instead of raw Python dictionaries.
+
+2.  **Rigorous Data Validation:**
+    *   **Practice:** Use Pydantic models for comprehensive request and response data validation, both for internal components and external APIs.
+
+3.  **LLM API Structured Output:**
+    *   **Practice:** When interacting with Large Language Models (LLMs), if the primary task is to generate a *structured JSON object*, ensure the LLM is prompted and guided to produce output that strictly conforms to a predefined Pydantic model schema. The Pydantic model serves as the "contract" for the LLM's output.
+
+**Pydantic Best Practices:**
+
+1.  **Define Data Structures Clearly with `BaseModel` and Precise Type Hints:**
+    *   **Practice:** Always use `pydantic.BaseModel` as the base for your data structures.
+    *   Employ standard Python type hints accurately and explicitly for each field (e.g., `int`, `str`, `list[str]`, `Optional[datetime]`, `Union[int, str]`, `Literal['a', 'b']`).
+
+2.  **Leverage Automatic Validation & Use Custom Validators Sparingly:**
+    *   **Practice:** Rely on Pydantic's built-in validation based on type hints and standard constraints first.
+    *   When custom logic is absolutely necessary, use the `@field_validator` (for single fields) or `@model_validator` (for whole-model checks) decorators. Keep validator functions focused, simple, and well-documented.
+
+3.  **Control Serialization Explicitly with `model_dump()` and `model_dump_json()`:**
+    *   **Practice:** When outputting data (e.g., for API responses, saving to a database), use `model_dump()` (for a Python dict) or `model_dump_json()` (for a JSON string).
+    *   Utilize arguments like `by_alias=True`, `exclude_unset=True`, `exclude_none=True`, or `include`/`exclude` to precisely control the output format and content.
+
+4.  **Configure Model Behavior via `model_config = ConfigDict(...)`:**
+    *   **Practice:** Use the `model_config` class attribute, assigning it a `pydantic.ConfigDict`, for model-wide settings:
+        *   Handling extra fields: `extra='allow'/'forbid'/'ignore'` (default to `'ignore'` or `'forbid'` for robustness).
+        *   Attribute assignment validation: `validate_assignment=True`.
+        *   Population by field name and alias: `populate_by_name=True` (Pydantic v2+ replaces `validate_by_name` and `validate_by_alias`).
+        *   Immutability: `frozen=True`.
+        *   Alias generation: `alias_generator=to_camel` (or other casing functions).
+        *   ORM integration: `from_attributes=True`.
+
+5.  **Customize Fields with `Field()` for Defaults, Aliases, and Metadata:**
+    *   **Practice:** Use `pydantic.Field()` (often with `typing.Annotated`) when customizing fields beyond type hints.
+    *   Common uses:
+        *   Default values: `default=...`
+        *   Default factories: `default_factory=...`
+        *   Field aliases: `alias='...'`, `validation_alias='...'`, `serialization_alias='...'`
+        *   Descriptions & Examples: `description='...'`, `examples=[...]`
+        *   Constraints: `gt=0`, `max_length=10`, `pattern='...'`
+
+6.  **Define and Validate Nested Structures Correctly:**
+    *   **Practice:** For hierarchical data, define nested `BaseModel`s and use them as type hints within parent models (e.g., `address: Address`, `items: list[Item]`). Pydantic automatically handles recursive validation and serialization.
+    *   **Avoid using generic `dict` or `Any` types for structured nested data.**
+
+7.  **Use `TypeAdapter` for Validating/Serializing Non-Model Types:**
+    *   **Practice:** When validating or serializing data against types *other* than `BaseModel` subclasses (e.g., `list[int]`, `dict[str, float]`, `TypedDict`, `Union`, primitives like `UUID`), instantiate `pydantic.TypeAdapter(YourType)` and use its methods (`.validate_python()`, `.validate_json()`, `.dump_python()`, `.dump_json()`).
+
+8.  **Implement Robust `ValidationError` Handling:**
+    *   **Practice:** Anticipate validation failures, especially with external data. Wrap Pydantic validation calls (model instantiation, `model_validate()`, `TypeAdapter.validate_python()`) in `try...except pydantic.ValidationError as e:` blocks.
+    *   Inspect `e.errors()` for detailed, structured information to generate informative logs or user-facing error messages.
+
+9.  **Utilize Strict Mode Selectively for Precision:**
+    *   **Practice:** Be aware of Pydantic's default "lax" mode (coerces types, e.g., `'1'` to `int 1`) versus "strict" mode (requires exact type matches).
+    *   Apply strict mode globally (`model_config = ConfigDict(strict=True)`) or per-field (`Annotated[int, Field(strict=True)]`) when unintended coercion is risky.
+
+10. **Add Derived Data Cleanly with `@computed_field`:**
+    *   **Practice:** For values calculated from other fields that should be in serialized output but aren't input data or stored state, define a method decorated with `@pydantic.computed_field` and `@property`. Ensure a clear return type hint.
+
+11. **Pydantic Settings Management:**
+    *   **Practice:** Use `pydantic-settings.BaseSettings` for managing application configurations. This provides validation, type casting, and loading from environment variables or .env files, ensuring settings are also well-structured Pydantic models.

@@ -1,0 +1,41 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+---
+description: Guidelines for the core processing logic of img2mermaid, including programmatic Mermaid generation from structured data, and validation/rendering checks using Playwright.
+globs: **/*.py, src/**/mermaid_generator.py, src/**/validation.py, src/**/rendering.py # Be more specific
+alwaysApply: false # Auto Attached based on globs
+agentRequested: false
+---
+
+**img2mermaid: Core Generation and Validation Logic**
+
+1.  **Programmatic Mermaid Generation from Pydantic Models:**
+    *   **Practice:** The `Mermaid Syntax Generation & Refinement Module` (Design Doc 4.3) **must** take the validated Pydantic model (e.g., `AIStructuredOutput`) as its sole input for generating the Mermaid code string.
+    *   This ensures deterministic and testable Mermaid generation, separating AI interpretation from syntax construction.
+    *   Implement diagram-type specific generation logic, potentially using a strategy pattern (e.g., `FlowchartGenerator`, `ClassDiagramGenerator`).
+
+2.  **Playwright for Mermaid Syntax Validation:**
+    *   **Practice:** Utilize Playwright to invoke `mermaid.parse()` in a browser context on the generated Mermaid code (FR7, Design Doc 4.4).
+    *   This step validates the fundamental syntax correctness according to the Mermaid.js library.
+    *   Gracefully handle and report errors from `mermaid.parse()`.
+
+3.  **Playwright for Mermaid Rendering Check:**
+    *   **Practice:** Employ Playwright to attempt rendering the validated Mermaid code using `mermaid.render()` in a browser context (FR8, Design Doc 4.5).
+    *   Verify that an SVG is actually produced.
+    *   Capture and report any JavaScript errors or rendering failures from Mermaid.js.
+    *   Ensure the Playwright environment correctly loads `mermaid.esm.min.mjs`.
+
+4.  **Robust Error Handling Through Pipeline Stages:**
+    *   **Practice:** Clearly distinguish and handle errors from each stage:
+        1.  Image Input/Preprocessing
+        2.  AI Analysis (and its Pydantic validation)
+        3.  Mermaid Syntax Generation (from Pydantic model)
+        4.  Mermaid Syntax Validation (Playwright `parse()`)
+        5.  Mermaid Rendering Check (Playwright `render()`)
+    *   The final output dictionary should clearly indicate `status`, `message`, and the `stage` where failure occurred (Design Doc 4.6).
+
+5.  **Modularity for Diagram Types:**
+    *   **Practice:** Structure the code (especially Mermaid generation and potentially parts of AI prompt augmentation) to easily support new Mermaid diagram types in the future (FR5). Consider dispatch tables or strategy patterns based on `diagramType`.

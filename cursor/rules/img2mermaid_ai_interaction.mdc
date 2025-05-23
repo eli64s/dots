@@ -1,0 +1,37 @@
+
+---
+description: Guidelines for AI interaction in the img2mermaid project, emphasizing structured output, prompt engineering for diagram analysis, and handling specific diagram types like AWS.
+globs: **/*.py, src/**/ai_core.py, src/**/prompt_engineering.py # Be more specific if these modules exist
+alwaysApply: false # Auto Attached based on globs
+agentRequested: false
+---
+
+**img2mermaid: AI Interaction & Structured Output Principles**
+
+1.  **Primary AI Goal: Structured Data First**
+    *   **Practice:** The primary task for the Generative AI (LLM) is to analyze the input image and return a **structured JSON object** that rigorously conforms to a predefined Pydantic model (e.g., `AIStructuredOutput` from the design document).
+    *   This Pydantic model is the "contract." The prompt must clearly instruct the AI to adhere to this schema.
+    *   The Pydantic model for AI output should use `ConfigDict(extra='forbid')` to catch any deviations.
+
+2.  **Prompt Engineering for Diagram Analysis:**
+    *   **Practice:** Construct prompts that guide the AI to:
+        *   Identify core diagram elements (nodes, edges, groups, text, shapes, etc.).
+        *   Determine the likely `diagramType` (e.g., flowchart, class, sequence).
+        *   Extract relevant `diagramDirection` if applicable.
+        *   Refer to the "Mermaid Feature Checklist" (Section 11.1 of the design document) to ensure the AI attempts to capture as many relevant Mermaid features as discernible from the image.
+    *   **Diagram-Type Hint:** If the user provides a `diagram_type_hint`, incorporate this into the prompt to focus the AI's analysis.
+
+3.  **Handling Specific Diagram Types (e.g., AWS):**
+    *   **Practice:** For complex or domain-specific diagrams like AWS architectures (FR4.1):
+        *   Provide specific instructions in the prompt on how to map visual elements (e.g., AWS service icons/labels) to appropriate Mermaid representations (e.g., Flowchart nodes with service names, or C4 model elements).
+        *   Guide the AI on the target Mermaid diagram type (e.g., "Convert this AWS architecture into a Mermaid `flowchart` or `C4Context` diagram.").
+
+4.  **AI's Mermaid Attempt (Secondary):**
+    *   **Practice:** While the structured JSON is primary, the AI can optionally be asked to also generate a raw Mermaid code string attempt.
+    *   This AI-generated Mermaid should be treated as a suggestion or a fallback, not the canonical source for the final output if structured data is available. The Python code will generate the definitive Mermaid from the structured JSON.
+
+5.  **Iterative Refinement / Self-Correction (Optional but Desirable):**
+    *   **Practice:** If the AI's initial structured output fails Pydantic validation, or if the generated Mermaid fails subsequent validation/rendering, consider a re-prompting strategy where the AI is given the error message and its previous attempt to try and correct its output.
+
+6.  **Log AI Inputs and Outputs:**
+    *   **Practice:** For debugging and improvement, log the exact prompt sent to the AI (or a hash if too long/contains image data directly) and the full, raw response received from the AI, especially during development and testing.

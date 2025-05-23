@@ -30,7 +30,13 @@
 
 ## Overview
 
-This repository contains configuration files and bash scripts to automate various development tasks. The files are organized into directories based on categories like Python, Git, Zsh, and more.
+This repository contains many common configuration files and development scripts I use daily. With a rich collection of Bash scripts, Python config files, and shell enhancements, this repo helps you:
+- 🚀 Automate repetitive dev tasks
+- 🛠️ Set up and manage environments fast
+- 🎵 Download and convert YouTube playlists
+- 📚 Aggregate docs for LLM workflows
+- 🧹 Clean, lint, and test codebases with a single command
+- ⚡ And much more!
 
 ###  Project Structure
 
@@ -38,9 +44,24 @@ The repository is structured as follows:
 
 ```sh
 .
+├── docker
+│   └── build_and_publish.sh
+├── docs
+│   ├── common
+│   │   └── python-project-templates.md
+│   └── quickstart
+│       └── uv.md
+├── git
+│   └── gitignore.txt
+├── just
+│   ├── justfile
+│   └── python-justfile.md
+├── lint
 ├── make
-│   ├── Makefile-poetry
-│   └── Makefile-uv
+│   ├── Makefile
+│   ├── Makefile.help.table
+│   ├── Makefile.poetry.mk
+│   └── Makefile.uv.mk
 ├── python
 │   ├──  noxfile.py
 │   ├── conf
@@ -51,7 +72,8 @@ The repository is structured as follows:
 │   │   ├── behave.ini
 │   │   └── pytest.ini
 │   └── type-checker
-│       └── mypy.ini
+│       ├── mypy.ini
+│       └── ty.toml
 ├── scripts
 │   ├── builds
 │   │   ├── docker_hub.sh
@@ -60,45 +82,83 @@ The repository is structured as follows:
 │   │   ├── clean.sh
 │   │   ├── run.sh
 │   │   └── test.sh
-│   ├── cookie-cutter
-│   │   └── create_structure.sh
 │   ├── converters
 │   │   └── svg_to_png.sh
-│   ├── file-system
+│   ├── cookie-cutter
+│   │   └── create_structure.sh
+│   ├── file
 │   │   ├── aggregate_docs.sh
 │   │   ├── chunk_docs.sh
 │   │   └── modify_filenames.sh
-│   └── install
-│       ├── local_dependencies.sh
-│       ├── local_dependencies_uninstall.sh
-│       ├── micromamba.sh
-│       ├── migrate_to_uv.sh
-│       ├── precommit.sh
-│       └── pyflink.sh
+│   ├── generators
+│   │   └── mkdir_from_tree.sh
+│   ├── install
+│   │   ├── local_dependencies_uninstall.sh
+│   │   ├── local_dependencies.sh
+│   │   ├── micromamba.sh
+│   │   ├── migrate_to_uv.sh
+│   │   ├── precommit.sh
+│   │   └── pyflink.sh
+│   └── youtube
+│       ├── download.log
+│       ├── failed_links.txt
+│       ├── README.md
+│       ├── youtube_downloader.sh
+│       └── youtube_links.txt
+├── tmux
 ├── vscode
 │   └── settings.json
 └── zsh
-    ├── .zprofile
-	└── .zshrc
+    ├── .zprofile
+    └── .zshrc
 ```
+
+---
 
 ## Installation
 
 To get started with the utility scripts, build the project from source:
 
 1. Clone the repository:
-```sh
-❯ git clone https://github.com/eli64s/dots
-```
+
+    ```sh
+    ❯ git clone https://github.com/eli64s/dots
+    ```
 
 2. Navigate to the project directory:
-```sh
-❯ cd dots
-```
 
-## Running the Scripts
+    ```sh
+    ❯ cd dots
+    ```
 
-One of my favorite scripts to use right now is [aggregate_docs.sh], which concatenates all files from a GitHub repository into a single file. I've found this script useful when working with language model APIs for providing the model with robust context and up-to-date information.
+## Running Scripts
+
+### 🔻 YouTube Batch Downloader
+
+Batch download YouTube videos from csv file of URLs and convert them to MP3 files.
+
+1. Make the script executable:
+
+    ```sh
+    ❯ chmod +x scripts/youtube/youtube_downloader.sh
+    ```
+
+2. Prepare a file with YouTube links (one URL per line):
+
+    ```sh
+    ❯ printf "https://youtu.be/dQw4w9WgXcQ\nhttps://youtu.be/3JZ_D3ELwOQ" > youtube_links.txt
+    ```
+
+3. Run the batch downloader:
+
+    ```sh
+    ❯ ./scripts/youtube/youtube_downloader.sh youtube_links.txt
+    ```
+
+<!--
+### 🔻 Aggregate Docs
+
+The [aggregate_docs.sh] script quickly combines all files from a GitHub repo into one file—perfect for preparing context for LLMs or other tools.
 
 First, let's view the help message for the script:
 
@@ -199,6 +259,7 @@ fpath+=("$DOTS_DIR/zsh/functions")
 ```
 
 This setup maintains the repository structure while making all bash scripts accessible as commands in your shell.
+-->
 
 > [!TIP]
 > The [scripts] directory contains a variety of utilities for automating tasks like environment setup, file operations, and codebase management.

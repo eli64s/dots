@@ -1,0 +1,15 @@
+[src]
+root = "./src"
+
+[environment]
+python = "./.venv"
+python-version = "3.11"
+
+[rules]
+unused-ignore-comment = "warn"
+redundant-cast = "ignore"
+possibly-unbound-attribute = "error"
+possibly-unbound-import = "error"
+
+[terminal]
+output-format = "concise"

@@ -1,0 +1,38 @@
+---
+description: API design best practices for the img2mermaid Python library, focusing on asynchronous operations, resource management, and clear user-facing interfaces.
+globs: **/*.py, src/**/api.py, src/img2mermaid/api.py # Be more specific if your main API class is defined elsewhere
+alwaysApply: false # Auto Attached based on globs
+agentRequested: false
+---
+
+**img2mermaid: Python Library API Design**
+
+1.  **Asynchronous by Default:**
+    *   **Practice:** Given the reliance on network calls (AI APIs) and potentially Playwright, the primary API methods (e.g., `convert_image_to_mermaid`) should be `async`.
+
+2.  **Resource Management with Async Context Manager:**
+    *   **Practice:** Implement the main `Img2Mermaid` class as an asynchronous context manager (`async def __aenter__`, `async def __aexit__`).
+    *   This ensures proper setup and teardown of resources, particularly the Playwright browser instance if managed internally.
+    *   Example usage: `async with Img2Mermaid(...) as converter: ...`
+
+3.  **Clear API Key Handling (NFR4, Security 10.1):**
+    *   **Practice:** API keys for external AI services must be provided by the user (e.g., via constructor, environment variables loaded by `pydantic-settings` if used).
+    *   The library itself **must not** store or hardcode API keys.
+    *   Clearly document how users should provide API keys.
+
+4.  **Flexible Input/Output (FR1, FR9, API Design 5):**
+    *   **Practice:** Support image input via both file path and bytes (`image_path: str`, `image_bytes: bytes`).
+    *   Provide clear output formats (e.g., `output_format: Literal["markdown", "raw_mermaid", "json_intermediate"]`) controlled by a parameter.
+    *   The return type should be a consistent dictionary indicating `status`, `message`, the relevant output (`mermaid_code`, `raw_mermaid`, etc.), and `stage` of failure if applicable.
+
+5.  **Configuration and Extensibility:**
+    *   **Practice:** Allow configuration of the AI provider (`ai_provider: str`) and specific model (`ai_model_name: str`).
+    *   The `DiagramAI` abstraction (Design Doc 4.2) is key for supporting multiple AI backends.
+    *   Consider optional parameters for advanced control (e.g., timeouts, retry strategies for AI calls) if needed, potentially managed via a Pydantic settings model.
+
+6.  **User Feedback for Long Operations (NFR2):**
+    *   **Practice:** Consider providing an optional `progress_callback: Optional[Callable[[str], Awaitable[None]]]` in methods like `convert_image_to_mermaid` to allow users to receive status updates during long-running operations.
+
+7.  **Playwright Dependency Management (AC5):**
+    *   **Practice:** Clearly document that `Playwright` is a significant dependency and that users need to run `playwright install` to get browser binaries.
+    *   Consider making Playwright-dependent features (validation/rendering) optional via extras_require (e.g., `pip install img2mermaid[rendering]`) if there's a valid use case for just the AI interpretation without local rendering checks.

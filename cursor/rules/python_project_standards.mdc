@@ -1,0 +1,93 @@
+---
+description: General Python project standards covering versioning, packaging, modularity, code style, testing, and documentation for scalable and maintainable generative AI projects.
+globs: **/*.py, src/**/*.py, tests/**/*.py
+alwaysApply: false # Auto Attached based on globs
+agentRequested: false
+---
+
+**General Python Project Standards:**
+
+1.  **Python Version:**
+    *   Target Python 3.11 or higher for access to modern language features and performance improvements.
+
+2.  **Package Management:**
+    *   Use `uv` as the primary package manager and virtual environment tool for its speed and modern capabilities. Projects should include a `pyproject.toml` configured for `uv`.
+
+3.  **Modularity and Code Structure:**
+    *   Modularize components into smaller, well-defined, reusable pieces (functions, classes, modules).
+    *   Organize code logically, typically with a `src/` layout for application code and a `tests/` directory for tests.
+
+4.  **LLM API Interactions (General Principle):**
+    *   If working on code that makes requests to an LLM API, prioritize using structured output generation techniques to ensure robust and scalable code. This often involves Pydantic models (see `pydantic_best_practices.mdc`).
+
+5.  **Standard Library Usage:**
+    *   Leverage the Python standard library for common functionality before reaching for third-party packages where appropriate.
+
+6.  **Code Quality:**
+    *   Write scalable, maintainable code that is easy to understand and extend.
+    *   Write performant, optimized code, but avoid premature optimization. Profile before optimizing.
+    *   Use type hints for all function/method arguments and return values.
+    *   Use f-strings for all string formatting.
+
+**Testing with Pytest:**
+
+1.  **Framework:** Use `pytest` as the testing framework.
+2.  **Test Organization:**
+    *   Place tests in a dedicated `tests/` directory.
+    *   Use a `tests/conftest.py` file for shared fixtures and helper functions.
+3.  **Fixtures:** Implement proper `pytest` fixtures for setting up test preconditions and managing resources.
+4.  **Parameterization:** Leverage `pytest.mark.parametrize` for clean, data-driven, and extensible tests.
+5.  **Coverage:** Test all significant code paths, including success cases, edge cases, and error scenarios.
+6.  **Pytest Extensions:**
+    *   `pytest-cov`: For measuring test coverage. Aim for high coverage.
+    *   `pytest-mock`: For proper mocking of dependencies and external services.
+    *   `pytest-randomly`: To execute tests in a random order, helping identify tests with hidden dependencies or side effects.
+    *   `pytest-xdist`: For parallel test execution to speed up the test suite.
+
+**Documentation and Comments:**
+
+1.  **Docstring Format:**
+    *   Use NumPy-style docstrings (without explicit type mentions in the docstring body if type hints are present in the signature, as per `numpydoc` or modern Sphinx conventions).
+    *   Example:
+        ```python
+        def my_function(param1: int, param2: str) -> bool:
+            """
+            A brief summary of the function.
+
+            A more detailed explanation can go here, spanning
+            multiple lines if necessary.
+
+            Parameters
+            ----------
+            param1
+                Description of param1.
+            param2
+                Description of param2.
+
+            Returns
+            -------
+            bool
+                Description of the return value.
+            """
+            # ... function body ...
+            return True
+        ```
+
+2.  **API Documentation:**
+    *   Document all public APIs (functions, classes, methods).
+    *   Consider tools like Sphinx with `sphinx-autoapi` or `sphinx-apidoc` and `sphinx-rtd-theme` to generate API documentation from docstrings.
+
+3.  **README:**
+    *   Keep the `README.md` file comprehensive and up-to-date with project overview, setup instructions, usage examples, and contribution guidelines.
+
+4.  **Environment Setup:**
+    *   Clearly document the development environment setup process, including Python version, `uv` usage, and any other dependencies.
+
+5.  **Code Comments:**
+    *   Comment sparingly, focusing on *why* something is done, rather than *what* is being done (which should be clear from the code itself).
+    *   If using block comments for sections, use the specified style:
+        ```python
+        # --------------------------------------------------------------------------- #
+        # [CONCISE EXPLANATION OF THE FOLLOWING CODE BLOCK]
+        # --------------------------------------------------------------------------- #
+        ```

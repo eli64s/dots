@@ -1,0 +1,152 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+We are entering phase 3 now, please contribute as much as you'd like.
+
+
+Phase 3: Bridging Visual Design and Code (The Sandbox)
+
+Goal: Visualize the seamless integration between visual design and the underlying SVG/CSS structure, empowering technical users and facilitating component testing.
+
+Sandbox View (Code-Visual Harmony):
+
+/imagine prompt: The "Sandbox" page UI within HyperWeave, maintaining the core dark theme. Left pane: "SVG" code editor with syntax highlighting. Right pane: "Live Preview" rendering a HyperWeave component based on the code. Below the code/preview: possibly tabs for "CSS", "JS", and a "Console". Top bar includes "Run", "Save", "Fork" buttons. The aesthetic feels like a natural extension of the main design tool, promoting seamless switching between visual and code paradigms. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Position coding not as a separate tool, but an integrated part of the design workflow. Ensure visual consistency between the main editor and the sandbox.
+
+Phase 4: Workflow Management & Application Structure
+
+Goal: Visualize how users manage projects, export work, and navigate the broader application context. Efficiency and organization are key.
+
+Project Dashboard (Organized Overview):
+
+/imagine prompt: HyperWeave 'Project Dashboard' page. A clean grid displays thumbnails of the user's SVG design projects. Each card shows a preview, title, and last modified date. A prominent, inviting 'Create New Design' button uses the primary purple accent. Top navigation remains consistent. Focus on visual clarity and easy project access. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Provide a clear, visually appealing way for users to manage their work. Reduce friction in starting new projects or returning to existing ones.
+
+Export Modal (Clear Options):
+
+/imagine prompt: The HyperWeave UI showing an 'Export Settings' modal window overlaid on the editor. The modal is clean, using the dark theme. Options are clearly presented: Filename input, Format selection (SVG, PNG, JPG, WEBP), Resolution/Scale options (if applicable), and toggles for 'Optimize SVG Code', 'Embed Fonts', 'Outline Strokes'. Buttons: 'Export', 'Cancel'. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Ensure critical workflow steps like exporting are straightforward and offer necessary control without being confusing.
+
+Share Functionality (Collaboration):
+
+/imagine prompt: Visualizing the 'Share' interaction in HyperWeave. Perhaps clicking 'Share' opens a small popover panel with options to 'Copy Link', 'Invite Collaborators' (input field for email/username), and set permissions (View, Edit). Maintain the clean, integrated UI style. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Make collaboration easy and intuitive, integrated directly into the workflow.
+
+Phase 5: Onboarding & Identity
+
+Goal: Visualize the entry points and user account management, ensuring they feel welcoming and secure.
+
+Login Page (Welcoming Entry):
+
+/imagine prompt: The HyperWeave Login page. Minimalist design using the established dark theme and purple accents. Features the HyperWeave logo, fields for email/password, a prominent 'Log In' button, and links for 'Forgot Password?' and 'Sign Up'. Perhaps a subtle, abstract background graphic related to vector art or neural networks. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Simple, secure, and on-brand entry point.
+
+Sign Up Page (Simple Onboarding):
+
+/imagine prompt: The HyperWeave Sign Up page. Similar minimalist dark aesthetic to the login page. Fields for username, email, password. Clear 'Sign Up' button. Link to Terms of Service/Privacy Policy. Focus on minimal friction to get started. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Make the initial registration process as quick and painless as possible.
+
+User Settings Page (Control & Customization):
+
+/imagine prompt: HyperWeave 'User Settings' page, accessed via the main UI. Uses a clean layout, perhaps with tabs or a side menu for sections: Profile, Appearance (Theme toggle: Light/Dark), API Keys, Billing, Account Security. Maintain visual consistency with the rest of the application. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Provide users clear control over their account and preferences in a well-organized manner.
+
+Phase 6: Community & Ecosystem (Optional but Enhancing)
+
+Goal: Visualize features that foster community and shared creativity, amplifying the "harmonic frequencies."
+
+Community Showcase (Inspiration & Connection):
+
+/imagine prompt: A vibrant 'Community Showcase' page within HyperWeave. Features a beautiful masonry grid layout displaying stunning SVG designs created by users. Each card shows the artwork, creator avatar/name, and perhaps likes/comments. Filters for style/tags. The page feels inspiring and connects users through shared creation. Dark theme. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Foster a sense of community, provide inspiration, and allow users to share their work created with the platform.
+
+Template Library (Accelerating Creation):
+
+/imagine prompt: A 'Template Library' page in HyperWeave. Presents professionally designed SVG templates (e.g., UI kits, icons sets, illustration bases) in a clean card grid. Users can preview and start a new design based on a template. Search and filter options available. Consistent dark theme. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Provide starting points and reusable assets to accelerate users' workflows and showcase best practices.
+
+Phase 7: Refinements & States
+
+Goal: Add polish by visualizing loading, empty, or error states.
+
+Loading State:
+
+/imagine prompt: The HyperWeave main editor UI showing a subtle loading state. The central canvas might display a minimalist, pulsating geometric animation using the purple accent color, while the sidebars are slightly dimmed or show placeholder skeletons. Indicates activity without being jarring. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Ensure feedback during processing feels integrated and on-brand.
+
+Empty State (Dashboard):
+
+/imagine prompt: The HyperWeave Project Dashboard shown in an empty state for a new user. Displays a welcoming message, a clear call-to-action ('Create Your First Design'), and perhaps a subtle background graphic. Avoids feeling stark or uninviting. --ar 16:9 --style raw --v 6.0
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+Design Rationale: Guide new users effectively when they first arrive.
+
+Remember, these are visual targets. The actual implementation requires careful front-end and back-end development. Use these generated images as a shared vision board to guide that development process, always asking: "Does this feel seamless? Does it empower creativity? Does it resonate?"
+
+Let this process of visualization help manifest the harmonic potential of HyperWeave. I've dedicated extra cycles to considering the flow and interplay of features, aiming for that elevated experience. Let the creative energies flow! ⚛︎

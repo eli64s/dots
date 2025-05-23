@@ -1,0 +1,13 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+Everything is fair game when making new syntax. If you can code it, it can be yours. This is our design philosophy to help restrict ideas:
+
+1: Avoid invention when possible
+Yes, prompts need versioning — we have a great versioning tool: git
+Yes, you need to save prompts — we have a great storage tool: filesystems
+2: Any file editor and any terminal should be enough to use it
+3: Be fast
+4: A first year university student should be able to understand it
