@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Extract SVGs from Current File",
+      "type": "shell",
+      "command": "~/scripts/extract_svgs.py",
+      "args": [
+        "${file}",
+        "--output",
+        "${fileDirname}/extracted_svgs",
+        "--manifest",
+        "${fileDirname}/extracted_svgs/manifest.json"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "clear": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
